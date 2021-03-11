@@ -36,6 +36,44 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void _saveSettings(){
+    final newSettings = Settings(
+        username: _usernameController.text,
+        gender: _selectedGender,
+        programmingLanguages: _selectedProgrammingLanguages,
+        isEmployed: _isEmployed
+    );
+
+    print(newSettings);
+    _preferenceService.saveSettings(newSettings);
+  }
+
+  Widget radioTile(String text, Gender gender){
+    return RadioListTile(
+        title: Text(text),
+        value: gender,
+        groupValue: _selectedGender,
+        onChanged: (newValue){
+          setState(() {
+            _selectedGender = newValue;
+          });
+        }
+    );
+  }
+
+  Widget checkBoxTile(String text, ProgrammingLanguage value){
+    return CheckboxListTile(
+        title: Text(text),
+        value: _selectedProgrammingLanguages.contains(value),
+        onChanged: (_){
+          setState(() {
+            _selectedProgrammingLanguages.contains(value)
+                ?_selectedProgrammingLanguages.remove(value)
+                :_selectedProgrammingLanguages.add(value);
+          });
+        }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,99 +92,18 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
             ),
-            RadioListTile(
-                title: Text("FEMALE"),
-                value: Gender.FEMALE,
-                groupValue: _selectedGender, onChanged: (newValue){
-                  setState(() {
-                    _selectedGender = newValue;
-                  });
-            }
-            ),
-            RadioListTile(
-                title: Text("Male"),
-                value: Gender.MALE,
-                groupValue: _selectedGender, onChanged: (newValue){
-              setState(() {
-                _selectedGender = newValue;
-              });
-            }
-            ),
-            RadioListTile(
-                title: Text("Other"),
-                value: Gender.OTHER,
-                groupValue: _selectedGender, onChanged: (newValue){
-              setState(() {
-                _selectedGender = newValue;
-              });
-            }
-            ),
-            CheckboxListTile(
-                title: Text('Dart'),
-                value: _selectedProgrammingLanguages.contains(ProgrammingLanguage.DART),
-                onChanged: (_){
-                  setState(() {
-                    _selectedProgrammingLanguages.contains(ProgrammingLanguage.DART)
-                        ?_selectedProgrammingLanguages.remove(ProgrammingLanguage.DART)
-                        :_selectedProgrammingLanguages.add(ProgrammingLanguage.DART);
-                  });
-                }
-            ),
-            CheckboxListTile(
-                title: Text('Javascript'),
-                value: _selectedProgrammingLanguages.contains(ProgrammingLanguage.JAVASCRIPT),
-                onChanged: (_){
-                  setState(() {
-                    _selectedProgrammingLanguages.contains(ProgrammingLanguage.JAVASCRIPT)
-                        ?_selectedProgrammingLanguages.remove(ProgrammingLanguage.JAVASCRIPT)
-                        :_selectedProgrammingLanguages.add(ProgrammingLanguage.JAVASCRIPT);
-                  });
-                }
-            ),
-            CheckboxListTile(
-                title: Text('Kotlin'),
-                value: _selectedProgrammingLanguages.contains(ProgrammingLanguage.KOTLIN),
-                onChanged: (_){
-                  setState(() {
-                    _selectedProgrammingLanguages.contains(ProgrammingLanguage.KOTLIN)
-                        ?_selectedProgrammingLanguages.remove(ProgrammingLanguage.KOTLIN)
-                        :_selectedProgrammingLanguages.add(ProgrammingLanguage.KOTLIN);
-                  });
-                }
-            ),
-            CheckboxListTile(
-                title: Text('C'),
-                value: _selectedProgrammingLanguages.contains(ProgrammingLanguage.C),
-                onChanged: (_){
-                  setState(() {
-                    _selectedProgrammingLanguages.contains(ProgrammingLanguage.C)
-                        ?_selectedProgrammingLanguages.remove(ProgrammingLanguage.C)
-                        :_selectedProgrammingLanguages.add(ProgrammingLanguage.C);
-                  });
-                }
-            ),
-            CheckboxListTile(
-                title: Text('Python'),
-                value: _selectedProgrammingLanguages.contains(ProgrammingLanguage.PYTHON),
-                onChanged: (_){
-                  setState(() {
-                    _selectedProgrammingLanguages.contains(ProgrammingLanguage.PYTHON)
-                        ?_selectedProgrammingLanguages.remove(ProgrammingLanguage.PYTHON)
-                        :_selectedProgrammingLanguages.add(ProgrammingLanguage.PYTHON);
-                  });
-                }
-            ),
-            CheckboxListTile(
-                title: Text('Swift'),
-                value: _selectedProgrammingLanguages.contains(ProgrammingLanguage.SWIFT),
-                onChanged: (_){
-                  setState(() {
-                    _selectedProgrammingLanguages.contains(ProgrammingLanguage.SWIFT)
-                        ?_selectedProgrammingLanguages.remove(ProgrammingLanguage.SWIFT)
-                        :_selectedProgrammingLanguages.add(ProgrammingLanguage.SWIFT);
-                  });
-                }
-            ),
+
+            radioTile("FEMALE", Gender.FEMALE),
+            radioTile("Male", Gender.MALE),
+            radioTile("FEMALE", Gender.OTHER),
+
+            checkBoxTile('Dart', ProgrammingLanguage.DART),
+            checkBoxTile('Javascript', ProgrammingLanguage.JAVASCRIPT),
+            checkBoxTile('Kotlin', ProgrammingLanguage.KOTLIN),
+            checkBoxTile('C', ProgrammingLanguage.C),
+            checkBoxTile('Python', ProgrammingLanguage.PYTHON),
+            checkBoxTile('Swift', ProgrammingLanguage.SWIFT),
+
             SwitchListTile(
                 title: Text('Is Employed'),
                 value: _isEmployed,
@@ -164,18 +121,4 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-
-  void _saveSettings(){
-    final newSettings = Settings(
-      username: _usernameController.text,
-      gender: _selectedGender,
-      programmingLanguages: _selectedProgrammingLanguages,
-      isEmployed: _isEmployed
-    );
-
-    print(newSettings);
-    _preferenceService.saveSettings(newSettings);
-  }
-
-
 }
